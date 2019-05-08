@@ -12,25 +12,28 @@ def unpickle(file):
     return dict
 
 def load_training_batch(folder, batch_index):
-
+  
+    ###load batch using pickle###
     file_name = folder + '/data_batch_' + str(batch_index)
     dict = unpickle(file_name)
 
     return dict
 
 def load_testing_batch(folder):
-
+  
     file_name = folder + '/test_batch'
     dict = unpickle(file_name)
 
     return dict
 
 def features_reshape(feature):
+  
     feature = np.reshape(feature, (-1,32,32,3), order='F')
 
     return feature
 
 def display_data_stat(folder,batch_index,data_id):
+     
     file_name = folder + '/data_batch_' + str(batch_index)
     dict = unpickle(file_name)
     features = dict['data']
@@ -40,6 +43,7 @@ def display_data_stat(folder,batch_index,data_id):
     plt.imshow(get_image)
 
 def preprocess_data(folder_path):
+   
     # read training data
     vali_ratio = 0.2
     for idx in range(1,6):
@@ -99,3 +103,35 @@ def preprocess_data(folder_path):
     with open('test_data.pickle', 'wb') as f:
         pickle.dump((test_features,test_labels), f)
 
+def load_preprocessed_training_batch(batch_id,batch_size):
+    """
+    Args:
+        batch_id: the specific training batch you want to load
+        mini_batch_size: the number of examples you want to process for one update
+    Return:
+        mini_batch(features,labels, mini_batch_size)
+    """
+    filename = 'train_data.pickle'
+    features, labels = pickle.load(open(filename, mode='rb'))
+
+    # Return the training data in batches of size <batch_size> or less
+    return mini_batch(features, labels, batch_size)
+
+def load_preprocessed_validation_batch(batch_size):
+    #file_name = 
+    #features,labels = 
+    #return features,labels
+    filename = 'validation.p'
+    features, labels = pickle.load(open(filename, mode='rb'))
+
+    # Return the training data in batches of size <batch_size> or less
+    return mini_batch(features, labels, batch_size)
+
+def load_preprocessed_test_batch(batch_size):
+    #file_name = 
+    ##features,label =
+    #return mini_batch(features,labels,test_mini_batch_size)
+    filename = 'test.p'
+    features, labels = pickle.load(open(filename, mode='rb'))
+    # Return the training data in batches of size <batch_size> or less
+    return mini_batch(features, labels, batch_size)
